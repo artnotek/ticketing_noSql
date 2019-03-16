@@ -10,17 +10,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // CORS block
-app.use(function(req, res, next) {
-    res.setHeader('Content-type','application/json');
-    res.setHeader('Accept','application/json');
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin');
-    next();
+app.use(function(err, req, res, next) {
+    console.log(err); // to see properties of message in our console
+    res.status(422).send({error: err.message});
 });
 
 // Configuring the database
-
 mongoose.Promise = global.Promise;
 
 // Connecting to the database
@@ -32,6 +27,8 @@ mongoose.connect('mongodb+srv://dani:dan@cluster0-8uqu6.mongodb.net/test?retryWr
     console.log('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
+
+app.use(express.static('public'));
 
 // imports des routes
 require('./routes/users.route.js')(app);

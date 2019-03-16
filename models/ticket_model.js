@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const TicketSchema = mongoose.Schema({
    title: !String,
    description: !String,
-   userName: !String,
+   userId: !String,
    assigned: !String,
-   progress: !String 
+   progress: !String,
+   solution: String,
 
 
 });
