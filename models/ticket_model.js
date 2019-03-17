@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const TicketSchema = mongoose.Schema({
    title: !String,
    description: !String,
-   userId: !String,
+   sender: !String,
    assigned: !String,
    progress: !String,
    solution: String,

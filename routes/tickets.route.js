@@ -1,10 +1,11 @@
 module.exports = (app) => {
    const Ticket = require('../models/ticket_model.js');
+   const User = require('../models/user_model.js');
 
 
    // Create a new ticket
    app.post('/tickets', function(req,res){
-      if(!req.body.ticket.title) {
+      if(!req.body.ticket.description) {
          return res.status(400).send({
              message: "ticket content can not be empty"
          });
@@ -12,8 +13,8 @@ module.exports = (app) => {
      const ticket = new Ticket({
          title: req.body.ticket.title ,
          description: req.body.ticket.description,
-         ticketId:req.body.ticket.ticketId,
-         assigned:req.body.ticket.ticketId,
+         sender:req.body.ticket.sender,
+         assigned:req.body.ticket.assigned,
          progress: req.body.ticket.progress,
          solution:req.body.ticket.solution
      });
@@ -46,10 +47,8 @@ module.exports = (app) => {
 
    });
 
-   // //Maj d'un utilisateur avec identifiant
+   // //Maj d'un ticket avec identifiant
    app.put('/tickets/:id', function(req,res){
-       // Validate Request
-    
 
       // Find ticket and update it with the request body
       Ticket.findByIdAndUpdate(req.params.id, {
@@ -75,6 +74,7 @@ module.exports = (app) => {
             });
       });
    });
+   
 
    // Delete a ticket with ticketid
    app.delete('/tickets/:id', function(req,res){

@@ -154,15 +154,15 @@
                             <input type="text" ref="ticketIdU" placeholder="ticketIdU" required />
                         
                             <label>assigned</label>
-                            <input type="text" ref="assigned" placeholder="assigned" />
+                            <input type="text" ref="assignedU" placeholder="assigned" />
                             <label>progress</label>
-                            <select ref={(input) => this.progress = input} required>
+                            <select ref={(input) => this.progressU = input} required>
                                 <option value="to do">to do</option>
                                 <option value="in review">in review</option>
                                 <option value="done">done</option>
                             </select>
                             <label>solution</label>
-                            <textarea type="text" ref="solution" placeholder="solution">
+                            <textarea type="text" ref="solutionU" placeholder="solution">
                             </textarea>
                             <input type="submit" value="update Ticket" />
                         </form>
@@ -195,9 +195,9 @@
                 e.preventDefault();
                 console.log(typeof(this.progress.value))
                 var ticket ={
-                    assigned: this.refs.assigned.value,
-                    progress: this.progress.value,
-                    solution: this.refs.solution.value
+                    assigned: this.refs.assignedU.value,
+                    progress: this.progressU.value,
+                    solution: this.refs.solutionU.value
                 }
                 axios.put(`/tickets/${this.refs.ticketIdU.value}`, {ticket}).then( res => {
                     console.log(res);
