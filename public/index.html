@@ -1,231 +1,301 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style.css">
-    <title>ticketing noSql</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="stylesheet" href="style.css">
+   <title>ticketing noSql</title>
+   <style>#contentfeed {display: none;}</style>
 </head>
 <body>
-    <h1>Jirare</h1>
-    <div id="homepage">
-        <div id="users">
-            
-        </div>
-        <div id="tickets">
-            
-        </div>
-    </div>
+   <h1>Jirare</h1>
+   <div id="homepage">
+      <div id="users">
 
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-        <script src="https://unpkg.com/react@15/dist/react.js"></script>
-        <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+      </div>
+      <div id="tickets">
 
-        <!-- Create React Component -->
-        <script type="text/babel">
-        var Users = React.createClass({
-            getInitialState: function(){
-                return({
-                    users: []
-                });
-            },
-            render: function(){
-                var users = this.state.users;
-                users = users.map(function(user, index){
-                    return(
-                        
-                        <ul key={index}>
-                            <span className="name">{user._id} </span>
-                            <span className="name">{user.name} </span>
-                            <span className="lastName">{user.lastName} </span>
-                            <span className="job">{user.job} </span>
-                        </ul>
-                    );
-                });
-                return(
-                    <div id="user-container">
-                        <h1>User</h1>
-                        <button onClick={this.allUser}>show all User</button>
-                        <form id="search" onSubmit={this.creatUser}>
-                            <label>name:</label>
-                            <input type="text" ref="name" placeholder="name" required />
-                            <label>last name:</label>
-                            <input type="text" ref="lastName" placeholder="lastname" required />
-                            <label>job:</label>
-                            <input type="text" ref="job" placeholder="job" required />
-                            <input type="submit" value="create User" />
-                        </form>
-                        <form id="delete" onSubmit={this.deleteUser}>
-                            <label>userId</label>
-                            <input type="text" ref="userId" placeholder="userId" required />
-                            <input type="submit" value="delete User" />
-                        </form>
-                        <ul>{users}</ul>
-                    </div>
-                );
-            },
-            creatUser: function(e){
-                e.preventDefault();
-                var user ={
-                    name: this.refs.name.value,
-                    lastName: this.refs.lastName.value,
-                    job: this.refs.job.value
-                }
-                axios.post('/users', {user}).then( res => {
-                    console.log(res);
-                    console.log(res.data);                    
-                });
-            },
-            allUser: function(e){
-                e.preventDefault();
-                fetch('/users').then(function(data){
-                    return data.json();
-                }).then( json => {
-                    this.setState({
-                        users: json
-                    });
-                    console.log(json);
-                });
-            },
-            deleteUser: function(e){
-                e.preventDefault();
+      </div>
+   </div>
 
-                axios.delete(`/users/${this.refs.userId.value}`).then( res => {
-                    console.log(res);
-                    console.log(res.data);
-                });
-            }
-        });
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+   <script src="https://unpkg.com/react@15/dist/react.js"></script>
+   <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
 
-        var Tickets = React.createClass({
-            getInitialState: function(){
-                return({
-                    tickets: []
-                });
-            },
-            render: function(){
-                var tickets = this.state.tickets;
-                tickets = tickets.map(function(ticket, index){
-                    return(
-                        
-                        <tr key={index}>
-                            <td className="id">{ticket._id} </td>
-                            <td className="title">{ticket.title} </td>
-                            <td className="lastName">{ticket.sender} </td>
-                            <td className="job">{ticket.description} </td>
-                            <td className="job">{ticket.progress} </td>
-                            <td className="job">{ticket.assigned} </td>
-                            <td className="job">{ticket.solution} </td>
+   <!-- Create React Component -->
+   <script type="text/babel">
+   var Users = React.createClass({
+      getInitialState: function(){
+         return({
+            users: []
+         });
+      },
+      render: function(){
+         var users = this.state.users;
+         users = users.map(function(user, index){
+            return(
 
-                        </tr>
-                    );
-                });
-                return(
-                    <div id="ticket-container">
-                        <h1>Ticket</h1>
-                        <button onClick={this.allTicket}>show all Ticket</button>
-                        <h2>Create</h2>
-                        <form id="search" onSubmit={this.creatTicket}>
-                            <label>title:</label>
-                            <input type="text" ref="title" placeholder="title" required />
-                            <label>description:</label>
-                            <textarea type="text" ref="description" placeholder="description" required >
-                            </textarea>
-                            <label>Sender</label>
-                            <input type="text" ref="sender" placeholder="sender" required />
-                            <label>assigned</label>
-                            <input type="text" ref="assigned" placeholder="assigned" required />
-                            <label>progress</label>
-                            <select ref={(input) => this.progress = input} required>
-                                <option value="to do">to do</option>
-                                <option value="in review">in review</option>
-                                <option value="done">done</option>
-                            </select>
-                            <label>solution</label>
-                            <textarea type="text" ref="solution" placeholder="solution">
-                            </textarea>
-                            <input type="submit" value="create Ticket" />
-                        </form>
-                        <h2>update</h2>
-                        <form id="search" onSubmit={this.updateTicket}>
-                            <label>ticket id:</label>
-                            <input type="text" ref="ticketIdU" placeholder="ticketIdU" required />
-                        
-                            <label>assigned</label>
-                            <input type="text" ref="assignedU" placeholder="assigned" />
-                            <label>progress</label>
-                            <select ref={(input) => this.progressU = input} required>
-                                <option value="to do">to do</option>
-                                <option value="in review">in review</option>
-                                <option value="done">done</option>
-                            </select>
-                            <label>solution</label>
-                            <textarea type="text" ref="solutionU" placeholder="solution">
-                            </textarea>
-                            <input type="submit" value="update Ticket" />
-                        </form>
-                        <form id="delete" onSubmit={this.deleteTicket}>
-                            <label>ticketId</label>
-                            <input type="text" ref="ticketId" placeholder="ticketId" required />
-                            <input type="submit" value="delete Ticket" />
-                        </form>
-                        <ul>{tickets}</ul>
-                    </div>
-                );
-            },
-       
-            creatTicket: function(e){
-                e.preventDefault();
-                var ticket ={
-                    title: this.refs.title.value,
-                    description: this.refs.description.value,
-                    sender: this.refs.sender.value,
-                    assigned: this.refs.assigned.value,
-                    progress: this.progress.value,
-                    solution: this.refs.solution.value
-                }
-                axios.post('/tickets', {ticket}).then( res => {
-                    console.log(res);
-                    console.log(res.data);                    
-                });
-            },
-            updateTicket: function(e){
-                e.preventDefault();
-                console.log(typeof(this.progress.value))
-                var ticket ={
-                    assigned: this.refs.assignedU.value,
-                    progress: this.progressU.value,
-                    solution: this.refs.solutionU.value
-                }
-                axios.put(`/tickets/${this.refs.ticketIdU.value}`, {ticket}).then( res => {
-                    console.log(res);
-                    console.log(res.data);                    
-                });
-            },
-            allTicket: function(e){
-                e.preventDefault();
-                fetch('/tickets').then(function(data){
-                    return data.json();
-                }).then( json => {
-                    this.setState({
-                        tickets: json
-                    });
-                    console.log(json);
-                });
-            },
-            deleteTicket: function(e){
-                e.preventDefault();
+               <ul key={index}>
+               <span className="name">{user._id} </span>
+               <span className="name">{user.name} </span>
+               <span className="lastName">{user.lastName} </span>
+               <span className="job">{user.job} </span>
+               </ul>
+            );
+         });
+         return(
+            <div id="user-container">
+            <h1>User</h1>
+            <button onClick={this.allUser}>show all User</button>
+            <form id="search" onSubmit={this.creatUser}>
+            <label>name:</label>
+            <input type="text" ref="name" placeholder="name" required />
+            <label>last name:</label>
+            <input type="text" ref="lastName" placeholder="lastname" required />
+            <label>job:</label>
+            <input type="text" ref="job" placeholder="job" required />
+            <input type="submit" value="create User" />
+            </form>
+            <form id="delete" onSubmit={this.deleteUser}>
+            <label>userId</label>
+            <input type="text" ref="userId" placeholder="userId" required />
+            <input type="submit" value="delete User" />
+            </form>
+            <ul>{users}</ul>
+            </div>
+         );
+      },
+      creatUser: function(e){
+         e.preventDefault();
+         var user ={
+            name: this.refs.name.value,
+            lastName: this.refs.lastName.value,
+            job: this.refs.job.value
+         }
+         axios.post('/users', {user}).then( res => {
+            console.log(res);
+            console.log(res.data);
+         });
+      },
+      allUser: function(e){
+         e.preventDefault();
+         fetch('/users').then(function(data){
+            return data.json();
+         }).then( json => {
+            this.setState({
+               users: json
+            });
+            console.log(json);
+         });
+      },
+      deleteUser: function(e){
+         e.preventDefault();
 
-                axios.delete(`/tickets/${this.refs.ticketId.value}`).then( res => {
-                    console.log(res);
-                    console.log(res.data);
-                });
-            }
-        });
-        ReactDOM.render(<Users />, document.getElementById('users'));
-        ReactDOM.render(<Tickets />, document.getElementById('tickets'));
-        </script>
+         axios.delete(`/users/${this.refs.userId.value}`).then( res => {
+            console.log(res);
+            console.log(res.data);
+         });
+      }
+   });
+
+   var Tickets = React.createClass({
+      getInitialState: function(){
+         return({
+            tickets: []
+         });
+      },
+      render: function(){
+         var tickets = this.state.tickets;
+         tickets = tickets.map(function(ticket, index){
+            return(
+
+               <tr key={index}>
+               <td className="id">{ticket._id} </td>
+               <td className="title">{ticket.title} </td>
+               <td className="lastName">{ticket.sender} </td>
+               <td className="job">{ticket.description} </td>
+               <td className="job">{ticket.progress} </td>
+               <td className="job">{ticket.assigned} </td>
+               <td className="job">{ticket.solution} </td>
+
+               </tr>
+            );
+         });
+         return(
+            <div id="ticket-container">
+            <h1>Ticket</h1>
+            <button onClick={this.allTicket}>show all Ticket</button>
+            <h2>Create</h2>
+            <form id="search" onSubmit={this.creatTicket}>
+            <label>title:</label>
+            <input type="text" ref="title" placeholder="title" required id="video_request"/>
+            <label>description:</label>
+            <textarea type="text" ref="description" placeholder="description" required >
+            </textarea>
+            <label>Sender</label>
+            <input type="text" ref="sender" placeholder="sender" required />
+            <label>assigned</label>
+            <input type="text" ref="assigned" placeholder="assigned" required />
+            <label>progress</label>
+            <select ref={(input) => this.progress = input} required>
+            <option value="to do">to do</option>
+            <option value="in review">in review</option>
+            <option value="done">done</option>
+            </select>
+            <div id="contentfeed"><h2>Take a look at these videos while awaiting your response</h2><div id="feed">></div></div>
+            <label>solution</label>
+            <textarea type="text" ref="solution" placeholder="solution">
+            </textarea>
+            <input type="submit" value="create Ticket" />
+            </form>
+            <h2>update</h2>
+            <form id="search" onSubmit={this.updateTicket}>
+            <label>ticket id:</label>
+            <input type="text" ref="ticketIdU" placeholder="ticketIdU" required />
+
+            <label>assigned</label>
+            <input type="text" ref="assignedU" placeholder="assigned" />
+            <label>progress</label>
+            <select ref={(input) => this.progressU = input} required>
+            <option value="to do">to do</option>
+            <option value="in review">in review</option>
+            <option value="done">done</option>
+            </select>
+            <label>solution</label>
+            <textarea type="text" ref="solutionU" placeholder="solution">
+            </textarea>
+            <input type="submit" value="update Ticket" />
+            </form>
+            <form id="delete" onSubmit={this.deleteTicket}>
+            <label>ticketId</label>
+            <input type="text" ref="ticketId" placeholder="ticketId" required />
+            <input type="submit" value="delete Ticket" />
+            </form>
+            <ul>{tickets}</ul>
+            </div>
+         );
+      },
+
+      creatTicket: function(e){
+         e.preventDefault();
+         var ticket ={
+            title: this.refs.title.value,
+            description: this.refs.description.value,
+            sender: this.refs.sender.value,
+            assigned: this.refs.assigned.value,
+            progress: this.progress.value,
+            solution: this.refs.solution.value
+         }
+         axios.post('/tickets', {ticket}).then( res => {
+            console.log(res);
+            console.log(res.data);
+         });
+      },
+      updateTicket: function(e){
+         e.preventDefault();
+         console.log(typeof(this.progress.value))
+         var ticket ={
+            assigned: this.refs.assignedU.value,
+            progress: this.progressU.value,
+            solution: this.refs.solutionU.value
+         }
+         axios.put(`/tickets/${this.refs.ticketIdU.value}`, {ticket}).then( res => {
+            console.log(res);
+            console.log(res.data);
+         });
+      },
+      allTicket: function(e){
+         e.preventDefault();
+         fetch('/tickets').then(function(data){
+            return data.json();
+         }).then( json => {
+            this.setState({
+               tickets: json
+            });
+            console.log(json);
+         });
+      },
+      deleteTicket: function(e){
+         e.preventDefault();
+
+         axios.delete(`/tickets/${this.refs.ticketId.value}`).then( res => {
+            console.log(res);
+            console.log(res.data);
+         });
+      }
+   });
+   ReactDOM.render(<Users />, document.getElementById('users'));
+   ReactDOM.render(<Tickets />, document.getElementById('tickets'));
+   </script>
+   <script>
+   $(document).ready(function () {
+      $("form").submit(function(e){
+         e.preventDefault();
+
+         var key = 'AIzaSyBkK8PEuhSfyz05gnUWhwOuE5cqWV5Oa3A';
+         var URL_API = 'https://www.googleapis.com/youtube/v3/search';
+
+
+         var options = {
+            part: 'snippet',
+            key: key,
+            maxResults: 4,
+            type: 'video',
+            q: encodeURIComponent($("#video_request").val()).replace(/%20/g, "+")
+         }
+
+
+         function loadVideos() {
+            $.getJSON(URL_API, options, function (data) {
+               //console.log(data);
+               listOfVideos(data);
+            });
+         }
+         loadVideos();
+
+
+         function listOfVideos(data) {
+            $('#feed').html(``);
+            $.each(data.items, function (i, item) {
+               var id = data.items[i].id.videoId;
+               var title = data.items[i].snippet.title;
+               var channel = data.items[i].snippet.channelTitle;
+               var publicationDateTime = data.items[i].snippet.publishedAt;
+               var views;
+
+               var msec = Date.parse(publicationDateTime);
+               var d = new Date(msec);
+               var publicationDate = d.getDate() +"."+ ( d.getMonth() + 1 ) +"."+ d.getFullYear();
+
+               /* getting viewCount */
+               var views_URL = "https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=" + id + "&key=AIzaSyBkK8PEuhSfyz05gnUWhwOuE5cqWV5Oa3A";
+               $.ajax({
+                  type: "GET",
+                  url: views_URL,
+                  cache: false,
+                  dataType:'jsonp',
+                  success: function(data){
+                     //console.log(data);
+                     views = data.items[0].statistics.viewCount;
+                     var viewCount = Number(views).toLocaleString().replace(/,/g, ' ');
+                     $('#contentfeed').css('display','block');                     $('#feed').append(`
+                        <h5>${title}</h5>
+                        <a href="https://www.youtube.com/watch?v=${id}" target="_blank">See on Youtube</a> <br>
+
+                        <iframe width="320" height="180" src="https://www.youtube.com/embed/${id}"
+                        frameborder="0" allow="accelerometer; autoplay; encrypted-media" allowfullscreen></iframe>
+                        <br><br><br><br>
+                        `);
+                     }
+                  });
+               });
+            };
+         });
+      });
+
+      </script>
 </body>
 </html>
